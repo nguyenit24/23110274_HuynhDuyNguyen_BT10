@@ -13,12 +13,11 @@
 <body>
 <header class="row">
     <div class="col">
-        <div th:replace="~{admin/fragments/header :: header}"></div>
+        <div th:replace="~{user/fragments/header :: header}"></div>
     </div>
 </header>
 
 <main class="container">
-
     <section class="row mt-4">
         <div class="col mt-5 mb-5">
             <div layout:fragment="content"></div>
@@ -28,7 +27,7 @@
 
 <footer class="row">
     <div class="col">
-        <div th:replace="~{admin/fragments/footer :: footer}"></div>
+        <div th:replace="~{user/fragments/footer :: footer}"></div>
     </div>
 </footer>
 

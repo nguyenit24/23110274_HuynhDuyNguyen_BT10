@@ -18,7 +18,7 @@ public class UserEntity {
     @Size(min = 3, message = "Password phải có ít nhất 3 ký tự")
     private String password;
     @NotBlank(message = "Role không được để trống")
-    @Pattern(regexp = "ADMIN|USER", message = "Role phải là ADMIN hoặc USER")
+    @Pattern(regexp = "Admin|User", message = "Role phải là Admin hoặc User")
     private String role;
     private String fullname;
 

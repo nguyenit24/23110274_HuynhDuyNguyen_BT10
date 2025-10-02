@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/layout_user.html}">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div th:if="${user != null}">
+        <p>Đang đăng nhập: <span th:text="${user.username}"></span></p>
+        <a th:href="@{/logout}">Đăng xuất</a>
+    </div>
+    <div th:if="${user  == null}">
+        <a th:href="@{/login}">Đăng nhập</a>
+    </div>
+</div>
+</body>
+</html>

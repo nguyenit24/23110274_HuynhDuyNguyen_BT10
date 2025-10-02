@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Data
@@ -22,7 +23,8 @@ public class CategoryEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long CategoryId;
 
-	@Column(name = "category_name", length = 100, columnDefinition = "nvarchar(200) not null")
+    @NotBlank(message = "Category name must not be blank")
+    @Column(name = "category_name", length = 200, nullable = false)
 	private String name;
 
 	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL)

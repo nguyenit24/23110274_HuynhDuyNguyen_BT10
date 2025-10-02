@@ -1,8 +1,10 @@
 package vn.iot.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,25 +22,27 @@ public class UserController {
 
     @GetMapping("/login")
     public String loginForm(Model model) {
-        model.addAttribute("user", new UserEntity());
         return "login";
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("user") UserEntity user,
-                        BindingResult result,
-                        Model model) {
-
-        if (result.hasErrors()) {
-            return "login";
-        }
-
-        UserEntity loggedIn = userService.login(user.getUsername(), user.getPassword());
-        System.out.println("Logged in user: " + loggedIn.getUsername() + ", Role: " + loggedIn.getRole());
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        Model model, HttpSession session) {
+        UserEntity loggedIn = userService.login(username, password);
         if (loggedIn != null) {
+            System.out.println("Logged in user: " + loggedIn.getUsername() + ", Role: " + loggedIn.getRole());
+            session.setAttribute("user", loggedIn);
             model.addAttribute("user", loggedIn);
+            if(loggedIn.getRole().equals("Admin")){
+                return "redirect:/admin/categories";
+            } else if(loggedIn.getRole().equals("User")){
 
-            return "redirect:/admin/categories";
+                return "user/home";
+            } else {
+                model.addAttribute("error", "Unknown role");
+                return "login";
+            }
         } else {
             model.addAttribute("error", "Invalid credentials");
             return "login";
@@ -67,5 +71,11 @@ public class UserController {
             model.addAttribute("error", "Username already exists");
             return "register";
         }
+    }
+
+    @GetMapping
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }

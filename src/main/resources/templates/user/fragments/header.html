@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div th:fragment="header">
+    <header class="d-flex align-items-center justify-content-between p-3 bg-light shadow-sm">
+        <!-- Logo hoặc hình cá nhân -->
+        <div class="d-flex align-items-center">
+            <img th:src="@{/images/myimage.png}" alt="My Photo" style="height:80px; border-radius: 8px;"/>
+            <h2 class="ms-3">Hệ thống Quản lý</h2>
+        </div>
+
+        <!-- Menu điều hướng -->
+        <nav>
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/categories}">Categories</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/about}">About</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+</div>
+</body>
+</html>
