@@ -37,8 +37,7 @@ public class UserController {
             if(loggedIn.getRole().equals("Admin")){
                 return "redirect:/admin/categories";
             } else if(loggedIn.getRole().equals("User")){
-
-                return "user/home";
+                return  "redirect:/user/home";
             } else {
                 model.addAttribute("error", "Unknown role");
                 return "login";
@@ -77,5 +76,11 @@ public class UserController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
+    }
+
+
+    @GetMapping("user/home")
+    public String home() {
+        return "user/home";
     }
 }
