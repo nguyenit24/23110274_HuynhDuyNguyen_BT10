@@ -1,9 +1,13 @@
 package vn.iot.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.iot.enity.UserEntity;
@@ -15,15 +19,25 @@ public class UserController {
     private IUserService userService;
 
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(Model model) {
+        model.addAttribute("user", new UserEntity());
         return "login";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        UserEntity user = userService.login(username, password);
-        if (user != null) {
-            model.addAttribute("user", user);
+    public String login(@Valid @ModelAttribute("user") UserEntity user,
+                        BindingResult result,
+                        Model model) {
+
+        if (result.hasErrors()) {
+            return "login";
+        }
+
+        UserEntity loggedIn = userService.login(user.getUsername(), user.getPassword());
+        System.out.println("Logged in user: " + loggedIn.getUsername() + ", Role: " + loggedIn.getRole());
+        if (loggedIn != null) {
+            model.addAttribute("user", loggedIn);
+
             return "redirect:/admin/categories";
         } else {
             model.addAttribute("error", "Invalid credentials");
@@ -32,17 +46,19 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String registerForm() {
+    public String registerForm(Model model) {
+        model.addAttribute("user", new UserEntity());
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password, @RequestParam String role, @RequestParam String fullname, Model model) {
-        UserEntity user = new UserEntity();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setRole(role);
-        user.setFullname(fullname);
+    public String register(@Valid @ModelAttribute("user") UserEntity user,
+                           BindingResult result,
+                           Model model) {
+        if (result.hasErrors()) {
+            return "register";
+        }
+
         UserEntity registered = userService.register(user);
         if (registered != null) {
             model.addAttribute("message", "Registration successful");
